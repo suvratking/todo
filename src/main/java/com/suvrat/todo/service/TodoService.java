@@ -10,9 +10,6 @@ import com.suvrat.todo.utils.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class TodoService {
@@ -20,7 +17,7 @@ public class TodoService {
 
     public TodoResponse createTodo(TodoRequest todoRequest) {
         var newTodo = new Todo(null, todoRequest.title(), todoRequest.completed());
-        Todo todo = todoRepository.save(newTodo);
+        var todo = todoRepository.save(newTodo);
         return CommonUtils.todoEntityToResponse(todo);
     }
 
@@ -47,8 +44,8 @@ public class TodoService {
     public TodoResponse updateTodo(TodoRequest updates, long id) {
         var byId = todoRepository.findById(id);
         if (byId.isPresent()) {
-            Todo existing = byId.get();
-            Todo updatedTodo = new Todo(existing.getId(), updates.title(), updates.completed());
+            var existing = byId.get();
+            var updatedTodo = new Todo(existing.getId(), updates.title(), updates.completed());
             return CommonUtils.todoEntityToResponse(todoRepository.save(updatedTodo));
         } else {
             throw new TodoNotFoundException("Todo does not exist with id " + id);
@@ -56,7 +53,7 @@ public class TodoService {
     }
 
     public void deleteById(long id) {
-        Optional<Todo> byId = todoRepository.findById(id);
+        var byId = todoRepository.findById(id);
         if(byId.isEmpty()) throw new TodoNotFoundException("Todo does not exist with id " + id);
         todoRepository.deleteById(id);
     }

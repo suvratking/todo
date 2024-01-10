@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.hamcrest.Matchers.*;
@@ -43,32 +42,32 @@ public class MockMvcTest {
 
     @Test
     public void shouldCreateNewTodo() throws Exception {
-        MvcResult result = mockMvc.perform(
+        var result = mockMvc.perform(
                         post(API_ROOT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(body.getBytes())
                                 .characterEncoding("utf-8"))
                 .andExpect(status().isCreated())
                 .andReturn();
-        TodoResponse resultTodo = objectMapper.readValue(result.getResponse().getContentAsString(), TodoResponse.class);
+        var resultTodo = objectMapper.readValue(result.getResponse().getContentAsString(), TodoResponse.class);
         assertThat(resultTodo.completed()).isFalse();
     }
 
     @Test
     public void shouldBeAbleToGetById() throws Exception {
-        MvcResult newTodoRequest = mockMvc.perform(
+        var newTodoRequest = mockMvc.perform(
                         post(API_ROOT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(body.getBytes())
                                 .characterEncoding("utf-8"))
                 .andExpect(status().isCreated())
                 .andReturn();
-        TodoResponse newTodo = objectMapper.readValue(newTodoRequest.getResponse().getContentAsString(),
+        var newTodo = objectMapper.readValue(newTodoRequest.getResponse().getContentAsString(),
                 TodoResponse.class);
-        MvcResult readBackTodo = mockMvc.perform(
+        var readBackTodo = mockMvc.perform(
                         get(API_ROOT+"/"+newTodo.id()))
                 .andReturn();
-        TodoResponse resultTodo = objectMapper.readValue(readBackTodo.getResponse().getContentAsString(),
+        var resultTodo = objectMapper.readValue(readBackTodo.getResponse().getContentAsString(),
                 TodoResponse.class);
         assertEquals(newTodo.title(), resultTodo.title());
     }
@@ -87,47 +86,47 @@ public class MockMvcTest {
 
     @Test
     public void shouldBeAbleToGetByTitle() throws Exception {
-        MvcResult newTodoRequest = mockMvc.perform(
+        var newTodoRequest = mockMvc.perform(
                         post(API_ROOT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(body.getBytes())
                                 .characterEncoding("utf-8"))
                 .andExpect(status().isCreated())
                 .andReturn();
-        TodoResponse newTodo = objectMapper.readValue(newTodoRequest.getResponse().getContentAsString(),
+        var newTodo = objectMapper.readValue(newTodoRequest.getResponse().getContentAsString(),
                 TodoResponse.class);
-        MvcResult readBackTodo = mockMvc.perform(
+        var readBackTodo = mockMvc.perform(
                         get(API_ROOT+"/title/"+newTodo.title()))
                 .andReturn();
-        ToDoResponseList resultTodo = objectMapper.readValue(readBackTodo.getResponse().getContentAsString(),
+        var resultTodo = objectMapper.readValue(readBackTodo.getResponse().getContentAsString(),
                 ToDoResponseList.class);
         assertFalse(resultTodo.todos().isEmpty());
     }
 
     @Test
     public void shouldBeUpdate() throws Exception {
-        MvcResult newTodoRequest = mockMvc.perform(
+        var newTodoRequest = mockMvc.perform(
                         post(API_ROOT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(body.getBytes())
                                 .characterEncoding("utf-8"))
                 .andExpect(status().isCreated())
                 .andReturn();
-        TodoResponse newTodo = objectMapper.readValue(newTodoRequest.getResponse().getContentAsString(),
+        var newTodo = objectMapper.readValue(newTodoRequest.getResponse().getContentAsString(),
                 TodoResponse.class);
-        String updateBody = """
+        var updateBody = """
                 {
                     "title": "wash floor 1234",
                     "completed": false
                 }
                 """;
-        MvcResult readBackTodo = mockMvc.perform(
+        var readBackTodo = mockMvc.perform(
                         put(API_ROOT+"/"+newTodo.id())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(updateBody.getBytes())
                                 .characterEncoding("utf-8"))
                 .andReturn();
-        TodoResponse resultTodo = objectMapper.readValue(readBackTodo.getResponse().getContentAsString(),
+        var resultTodo = objectMapper.readValue(readBackTodo.getResponse().getContentAsString(),
                 TodoResponse.class);
         assertNotEquals(newTodo.title(), resultTodo.title());
         assertEquals(newTodo.id(), resultTodo.id());
@@ -141,7 +140,7 @@ public class MockMvcTest {
                                 .content(body.getBytes())
                                 .characterEncoding("utf-8"))
                 .andExpect(status().isCreated());
-        String updateBody = """
+        var updateBody = """
                 {
                     "title": "wash floor 1234",
                     "completed": false
@@ -157,14 +156,14 @@ public class MockMvcTest {
 
     @Test
     public void shouldBeAbleToDeleteById() throws Exception {
-        MvcResult newTodoRequest = mockMvc.perform(
+        var newTodoRequest = mockMvc.perform(
                         post(API_ROOT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(body.getBytes())
                                 .characterEncoding("utf-8"))
                 .andExpect(status().isCreated())
                 .andReturn();
-        TodoResponse newTodo = objectMapper.readValue(newTodoRequest.getResponse().getContentAsString(),
+        var newTodo = objectMapper.readValue(newTodoRequest.getResponse().getContentAsString(),
                 TodoResponse.class);
         mockMvc.perform(delete(API_ROOT+"/"+newTodo.id())).andExpect(status().isOk());
     }

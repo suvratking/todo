@@ -2,9 +2,7 @@ package com.suvrat.todo.service;
 
 import com.suvrat.todo.entity.Todo;
 import com.suvrat.todo.exception.TodoNotFoundException;
-import com.suvrat.todo.pojo.ToDoResponseList;
 import com.suvrat.todo.pojo.TodoRequest;
-import com.suvrat.todo.pojo.TodoResponse;
 import com.suvrat.todo.repository.TodoRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,19 +25,19 @@ public class MockServiceTest {
 
     @Test
     public void createTodo_test(){
-        TodoRequest req = getReq();
-        Todo entity = getEntity();
+        var req = getReq();
+        var entity = getEntity();
         when(todoRepository.save(any(Todo.class))).thenReturn(entity);
-        TodoResponse todo = todoService.createTodo(req);
+        var todo = todoService.createTodo(req);
         assertEquals(entity.getTitle(), todo.title());
         assertEquals(entity.isCompleted(), todo.completed());
     }
 
     @Test
     public void getAll_test(){
-        Todo entity = getEntity();
+        var entity = getEntity();
         when(todoRepository.findAll()).thenReturn(List.of(entity));
-        ToDoResponseList findAll = todoService.getAll();
+        var findAll = todoService.getAll();
         assertFalse(findAll.todos().isEmpty());
         assertEquals(1, findAll.todos().size());
     }
@@ -53,9 +51,9 @@ public class MockServiceTest {
 
     @Test
     public void findById_test(){
-        Todo entity = getEntity();
+        var entity = getEntity();
         when(todoRepository.findById(1L)).thenReturn(Optional.of(entity));
-        TodoResponse byId = todoService.findById(1L);
+        var byId = todoService.findById(1L);
         assertEquals(entity.getId(), byId.id());
         assertEquals(entity.getTitle(), byId.title());
         assertEquals(entity.isCompleted(), byId.completed());
@@ -69,21 +67,21 @@ public class MockServiceTest {
 
     @Test
     public void findByTitle_test(){
-        Todo entity = getEntity();
+        var entity = getEntity();
         when(todoRepository.findByTitleContaining("test")).thenReturn(List.of(entity));
-        ToDoResponseList test = todoService.findByTitle("test");
+        var test = todoService.findByTitle("test");
         assertFalse(test.todos().isEmpty());
         assertEquals(1, test.todos().size());
     }
 
     @Test
     public void update_test(){
-        Todo entity = getEntity();
-        TodoRequest req = new TodoRequest("test1", true);
+        var entity = getEntity();
+        var req = new TodoRequest("test1", true);
         when(todoRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         entity.setCompleted(true);
         when(todoRepository.save(any(Todo.class))).thenReturn(entity);
-        TodoResponse todoResponse = todoService.updateTodo(req, entity.getId());
+        var todoResponse = todoService.updateTodo(req, entity.getId());
         assertEquals(entity.getId(), todoResponse.id());
         assertEquals(entity.getTitle(), todoResponse.title());
         assertSame(true, todoResponse.completed());
@@ -91,7 +89,7 @@ public class MockServiceTest {
 
     @Test(expected = TodoNotFoundException.class)
     public void update_test_invalid(){
-        TodoRequest req = new TodoRequest("test1", true);
+        var req = new TodoRequest("test1", true);
         when(todoRepository.findById(10L)).thenReturn(Optional.empty());
         todoService.updateTodo(req, 10L);
     }
