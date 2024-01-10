@@ -35,7 +35,7 @@ public class MockMvcTest {
 
     @Test
     public void shouldFetchTodos() throws Exception {
-        mockMvc.perform(get("/todos"))
+        mockMvc.perform(get(API_ROOT))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("clean kitchen")));
     }
