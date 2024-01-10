@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MockServiceTest {
+public class TodoServiceTest {
     @Mock
     private TodoRepository todoRepository;
     @InjectMocks

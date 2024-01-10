@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class MockMvcTest {
+public class TodoControllerTest {
     public static final String API_ROOT = "/todos";
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
