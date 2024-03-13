@@ -1,5 +1,5 @@
 FROM openjdk:21
 MAINTAINER suvrat
 COPY target/todo.jar todo.jar
-EXPOSE 8888:8888
+EXPOSE 8080
 ENTRYPOINT ["java","-jar","/todo.jar"]
