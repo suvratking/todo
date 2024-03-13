@@ -58,4 +58,9 @@ public class TodoService {
         todoRepository.deleteById(id);
     }
 
+    public ToDoResponseList qb(String title) {
+        var todos = todoRepository.searchByTitleContaining(title);
+        return new ToDoResponseList(CommonUtils.todoEntityToResponse(todos));
+    }
+
 }

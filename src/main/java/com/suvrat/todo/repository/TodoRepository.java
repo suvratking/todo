@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
     List<Todo> findByTitleContaining(String title);
+
+    List<Todo> searchByTitleContaining(String title);
 }

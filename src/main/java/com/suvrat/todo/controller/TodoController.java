@@ -55,6 +55,15 @@ public class TodoController {
         return ResponseEntity.ok(todo);
     }
 
+    @GetMapping("/title2/{title}")
+    public ResponseEntity<ToDoResponseList> qb(@PathVariable String title) {
+        log.info("Execution started -> {} -> findByTitle", CLASS_NAME);
+        System.out.println(Thread.currentThread().threadId());
+        System.out.println(this);
+        var todo = todoService.qb(title);
+        return ResponseEntity.ok(todo);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<TodoResponse> updateTodo(@RequestBody TodoRequest updates, @PathVariable long id) {
         log.info("Execution started -> {} -> updateTodo", CLASS_NAME);
