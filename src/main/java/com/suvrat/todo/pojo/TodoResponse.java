@@ -1,4 +1,8 @@
 package com.suvrat.todo.pojo;
 
-public record TodoResponse(Long id, String title, boolean completed) {
+import com.suvrat.todo.entity.UserEntity;
+
+import java.util.Set;
+
+public record TodoResponse(Long id, String title, boolean completed, Set<UserEntity> users) {
 }

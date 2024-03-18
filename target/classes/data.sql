@@ -10,3 +10,9 @@ CREATE TABLE todo (
 
 INSERT INTO TODO (id, title, completed) values (1000, 'clean kitchen counter', false);
 INSERT INTO TODO (id, title, completed) values (2000, 'go to market', false);
+--insert into user_entity (id) values (1);
+--insert into user_entity (id) values (2);
+--insert into todo_user_entities (todo_id, user_entities_id) values (1000, 1);
+--insert into todo_user_entities (todo_id, user_entities_id) values (1000, 2);
+--insert into todo_user_entities (todo_id, user_entities_id) values (2000, 1);
+--insert into todo_user_entities (todo_id, user_entities_id) values (2000, 2);

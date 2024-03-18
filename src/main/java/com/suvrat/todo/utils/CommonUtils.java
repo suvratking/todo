@@ -11,6 +11,6 @@ public class CommonUtils {
     }
 
     public static TodoResponse todoEntityToResponse(Todo todo){
-        return new TodoResponse(todo.getId(), todo.getTitle(), todo.isCompleted());
+        return new TodoResponse(todo.getId(), todo.getTitle(), todo.isCompleted(), todo.getUserEntities());
     }
 }

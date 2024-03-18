@@ -1,9 +1,12 @@
 package com.suvrat.todo.controller;
 
+import com.suvrat.todo.config.DataSourceConfigs;
 import com.suvrat.todo.pojo.ToDoResponseList;
 import com.suvrat.todo.pojo.TodoRequest;
 import com.suvrat.todo.pojo.TodoResponse;
 import com.suvrat.todo.service.TodoService;
+import com.zaxxer.hikari.HikariDataSource;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,8 @@ import java.util.Map;
 @Slf4j
 public class TodoController {
     private final TodoService todoService;
+    private final HikariDataSource dataSource;
+    private final DataSourceConfigs dataSourceConfigs;
     private final String CLASS_NAME = this.getClass().getSimpleName();
 
     @PostMapping
@@ -76,5 +81,15 @@ public class TodoController {
         log.info("Execution started -> {} -> deleteById", CLASS_NAME);
         todoService.deleteById(id);
         return ResponseEntity.ok(Map.of("msg", String.format("deleted successfully with id %s", id)));
+    }
+
+    @PostConstruct
+    public void test(){
+        System.out.println("Datasource ============= ");
+        dataSource.setMaximumPoolSize(100);
+        int maximumPoolSize = dataSource.getMaximumPoolSize();
+        System.out.println(dataSource.getClass().getName() + "    " + maximumPoolSize);
+        System.out.println("Datasource ============= ");
+        System.out.println(dataSourceConfigs);
     }
 }

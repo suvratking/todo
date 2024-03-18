@@ -1,0 +1,12 @@
+version: "3.0"
+services:
+  my-tc:
+    container_name: "tomcat-latest"
+    image: tomcat:latest
+    ports:
+      - "8080:8080"
+  todo:
+    container_name: "todo"
+    image: harness/todolist-sample:latest
+    ports:
+      - "9090:8080"
