@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping(value = "/todos")
@@ -91,5 +92,14 @@ public class TodoController {
         System.out.println(dataSource.getClass().getName() + "    " + maximumPoolSize);
         System.out.println("Datasource ============= ");
         System.out.println(dataSourceConfigs);
+    }
+
+
+    /**
+        Will not work
+    **/
+    @GetMapping("/getAsync")
+    public ResponseEntity<CompletableFuture<Integer>> getComplete() throws InterruptedException {
+        return ResponseEntity.ok(todoService.asyncTest());
     }
 }
