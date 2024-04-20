@@ -8,7 +8,10 @@ import com.suvrat.todo.pojo.TodoResponse;
 import com.suvrat.todo.repository.TodoRepository;
 import com.suvrat.todo.utils.CommonUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +64,18 @@ public class TodoService {
     public ToDoResponseList qb(String title) {
         var todos = todoRepository.searchByTitleContaining(title);
         return new ToDoResponseList(CommonUtils.todoEntityToResponse(todos));
+    }
+
+    @Async
+    public CompletableFuture<Integer> asyncTest() throws InterruptedException {
+        int sum = 0;
+        for (int i = 0; i < 100; i++) {
+            System.out.println("Inside async ============== " + (i+1));
+            Thread.sleep(100);
+            sum += i;
+        }
+        final int finalSum = sum;
+        return CompletableFuture.supplyAsync(() -> finalSum);
     }
 
 }
