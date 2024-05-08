@@ -3,17 +3,16 @@ package com.suvrat.todo.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.proxy.HibernateProxy;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "todo")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Todo {
@@ -31,21 +30,31 @@ public class Todo {
     private Set<UserEntity> userEntities = new LinkedHashSet<>();
 
     public Todo(Long id, String title, boolean completed) {
+        this.completed = completed;
+        this.id = id;
+        this.title = title;
     }
 
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Todo todo = (Todo) o;
-        return getId() != null && Objects.equals(getId(), todo.getId());
+        return new EqualsBuilder().append(completed, todo.completed).append(id, todo.id).append(title, todo.title).append(userEntities, todo.userEntities).isEquals();
     }
 
     @Override
-    public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(id).append(title).append(completed).append(userEntities).toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", completed=" + completed +
+                ", userEntities=" + userEntities +
+                '}';
     }
 }

@@ -22,7 +22,7 @@ public class TodoExampleApplication {
 		SpringApplication.run(TodoExampleApplication.class, args);
 	}
 
-	@PostConstruct
+//	@PostConstruct
 	public void test() throws InterruptedException {
 		CompletableFuture<Integer> cpInt = todoService.asyncTest();
 		cpInt

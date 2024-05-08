@@ -1,6 +1,9 @@
 package com.suvrat.todo.service;
 
+import com.github.javafaker.Faker;
+import com.google.common.collect.Lists;
 import com.suvrat.todo.entity.Todo;
+import com.suvrat.todo.entity.UserEntity;
 import com.suvrat.todo.exception.TodoNotFoundException;
 import com.suvrat.todo.pojo.ToDoResponseList;
 import com.suvrat.todo.pojo.TodoRequest;
@@ -11,7 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -68,7 +74,7 @@ public class TodoService {
 
     @Async
     public CompletableFuture<Integer> asyncTest() throws InterruptedException {
-        int sum = 0;
+        var sum = 0;
         for (int i = 0; i < 100; i++) {
             System.out.println("Inside async ============== " + (i+1));
             Thread.sleep(100);
@@ -76,6 +82,22 @@ public class TodoService {
         }
         final int finalSum = sum;
         return CompletableFuture.supplyAsync(() -> finalSum);
+    }
+
+    @Async
+    public CompletableFuture<List<Todo>> bulkInsert(){
+        System.out.println("Inside async ================= ");
+        var faker = Faker.instance();
+        var toDoList = Stream.generate(
+                        () -> new Todo(null,
+                                faker.funnyName().name(),
+                                faker.bool().bool(),
+                                Set.of(new UserEntity(), new UserEntity())))
+                .limit(1000).toList();
+        System.out.println(toDoList);
+        var partition = Lists.partition(toDoList, 100);
+        final var list = partition.stream().map(todoRepository::saveAll).flatMap(List::stream).toList();
+        return CompletableFuture.supplyAsync(() -> list);
     }
 
 }

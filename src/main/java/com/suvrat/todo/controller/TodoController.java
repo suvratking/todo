@@ -1,6 +1,7 @@
 package com.suvrat.todo.controller;
 
 import com.suvrat.todo.config.DataSourceConfigs;
+import com.suvrat.todo.exception.TodoNotFoundException;
 import com.suvrat.todo.pojo.ToDoResponseList;
 import com.suvrat.todo.pojo.TodoRequest;
 import com.suvrat.todo.pojo.TodoResponse;
@@ -63,7 +64,7 @@ public class TodoController {
 
     @GetMapping("/title2/{title}")
     public ResponseEntity<ToDoResponseList> qb(@PathVariable String title) {
-        log.info("Execution started -> {} -> findByTitle", CLASS_NAME);
+        log.info("Execution started -> {} -> qb", CLASS_NAME);
         System.out.println(Thread.currentThread().threadId());
         System.out.println(this);
         var todo = todoService.qb(title);
@@ -101,5 +102,13 @@ public class TodoController {
     @GetMapping("/getAsync")
     public ResponseEntity<CompletableFuture<Integer>> getComplete() throws InterruptedException {
         return ResponseEntity.ok(todoService.asyncTest());
+    }
+
+    @GetMapping("/addAsync")
+    public ResponseEntity<?> asyncAddTodo() {
+        todoService.bulkInsert()
+                .thenAccept(System.out::println)
+                .thenRun(() -> System.out.println("Completed"));
+        return ResponseEntity.ok(Map.of("msg", "inserted"));
     }
 }
