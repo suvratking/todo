@@ -10,3 +10,9 @@ server:
 spring:
   application:
     name: TODO-APP
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
